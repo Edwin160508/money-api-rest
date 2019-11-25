@@ -2,10 +2,17 @@ package com.app.money.api.handle;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.app.money.api.model.DetalheErro;
 import com.app.money.api.service.exception.CategoriaExistenteException;
@@ -21,7 +28,10 @@ import com.app.money.api.service.exception.CategoriaNaoEncontradaException;
  */
 
 @ControllerAdvice
-public class ResourceExceptionHandler {
+public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
+	
+	@Autowired
+	private MessageSource messageSource;
 	
 	/**
 	 * 
@@ -61,4 +71,16 @@ public class ResourceExceptionHandler {
 		return ResponseEntity.status(HttpStatus.CONFLICT).body(detalheErro);
 	}
 	
+	/**
+	 * Método responsável por fazer Tratamento de proriedades inválidas passadas pelo JSON.
+	 */
+	@Override
+	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException e, HttpHeaders headers, HttpStatus status, WebRequest request){		
+		DetalheErro detalheErro = new DetalheErro();
+		detalheErro.setStatus(400l);
+		detalheErro.setTitulo(messageSource.getMessage("mensagem.invalida", null, LocaleContextHolder.getLocale()));
+		detalheErro.setMenssagemDesenvolvedor(e.getCause().toString());
+		detalheErro.setDataHora(System.currentTimeMillis());
+		return handleExceptionInternal(e, detalheErro, headers, HttpStatus.BAD_REQUEST, request);
+	}
 }
