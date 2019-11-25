@@ -58,7 +58,7 @@ public class ResourceExceptionHandler {
 		detalheErro.setMenssagemDesenvolvedor("https://erros.moneyapi.com/409");
 		detalheErro.setDataHora(System.currentTimeMillis());
 		
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(detalheErro);
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(detalheErro);
 	}
 	
 }
