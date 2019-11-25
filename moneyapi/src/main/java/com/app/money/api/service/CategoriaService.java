@@ -68,7 +68,7 @@ public class CategoriaService {
 	 * @param id
 	 * @return Optional<Categoria>
 	 */
-	public Optional<Categoria> buscarCategoriaPorId(Long id){
+	public Optional<Categoria> buscarCategoriaPorCodigo(Long id){
 		Optional<Categoria> categoriaEncontrada = categoriaRepository.findById(id);
 		
 		if(!categoriaEncontrada.isPresent()) 
