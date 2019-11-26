@@ -17,6 +17,18 @@ public class DetalheErro {
 	private Long dataHora;
 	
 	private String menssagemDesenvolvedor;
+	
+	public DetalheErro(){
+		
+	}
+	
+	public DetalheErro(String titulo, Long status, Long dataHora , String menssagemDesenvolvedor){
+		this.titulo = titulo;
+		this.status = status;
+		this.dataHora = dataHora;
+		this.menssagemDesenvolvedor = menssagemDesenvolvedor;
+		
+	}
 
 	public String getTitulo() {
 		return titulo;

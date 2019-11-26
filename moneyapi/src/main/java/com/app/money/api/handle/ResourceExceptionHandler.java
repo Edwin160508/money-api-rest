@@ -1,5 +1,9 @@
 package com.app.money.api.handle;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +13,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -82,6 +89,27 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 		detalheErro.setTitulo(messageSource.getMessage(MensagemEnum.EXCEPTION_PROPRIEDADE_INVALIDA.getMensagem(), null, LocaleContextHolder.getLocale()));
 		detalheErro.setMenssagemDesenvolvedor(e.getCause().toString());
 		detalheErro.setDataHora(System.currentTimeMillis());
-		return handleExceptionInternal(e, detalheErro, headers, HttpStatus.BAD_REQUEST, request);
+		List<DetalheErro> erros = Arrays.asList(detalheErro);
+
+		return handleExceptionInternal(e, erros, headers, HttpStatus.BAD_REQUEST, request);
+	}
+	
+	/**
+	 * Método responsável por fazer tratamentos de parametros nulos
+	 */
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		List<DetalheErro> erros = criaListaErros(ex.getBindingResult(), 400l);
+		return handleExceptionInternal(ex, erros,headers, HttpStatus.BAD_REQUEST, request);
+	}
+	
+	private List<DetalheErro> criaListaErros(BindingResult bindingResult, Long httpStatus){
+		List<DetalheErro> erros = new ArrayList<>();
+		
+		for(FieldError campoErro: bindingResult.getFieldErrors()) {
+			erros.add(new DetalheErro(messageSource.getMessage(campoErro,LocaleContextHolder.getLocale()),httpStatus,System.currentTimeMillis(), campoErro.toString()));
+		}
+		return erros;
 	}
 }
