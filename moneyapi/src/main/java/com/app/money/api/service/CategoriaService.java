@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.app.money.api.enums.MensagemEnum;
 import com.app.money.api.model.Categoria;
 import com.app.money.api.repository.CategoriaRepository;
 import com.app.money.api.service.exception.CategoriaExistenteException;
@@ -51,10 +52,10 @@ public class CategoriaService {
 	public Optional<Categoria> buscarPorId(Long id) {
 		 Optional<Categoria> categoriaEncontrada = categoriaRepository.findById(id);
 		 if(!categoriaEncontrada.isPresent()) 
-			 throw new CategoriaNaoEncontradaException("Categoria não encontrado na base de dados.");
+			 throw new CategoriaNaoEncontradaException(MensagemEnum.EXCEPTION_CATEGORIA_NAO_ENCONTRADA_NA_BASE.getMensagem());
 		 
 		 if(categoriaEncontrada.isPresent())
-			 throw new CategoriaExistenteException("Categoria já existe na base de dados.");
+			 throw new CategoriaExistenteException(MensagemEnum.EXCEPTION_CATEGORIA_JA_EXISTE_NA_BASE.getMensagem());
 		 
 		 return categoriaEncontrada;
 	}
@@ -72,7 +73,7 @@ public class CategoriaService {
 		Optional<Categoria> categoriaEncontrada = categoriaRepository.findById(id);
 		
 		if(!categoriaEncontrada.isPresent()) 
-			 throw new CategoriaNaoEncontradaException("Categoria não encontrado na base de dados.");
+			 throw new CategoriaNaoEncontradaException(MensagemEnum.EXCEPTION_CATEGORIA_NAO_ENCONTRADA_NA_BASE.getMensagem());
 		
 		return categoriaEncontrada;
 	}

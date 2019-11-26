@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.app.money.api.enums.MensagemEnum;
 import com.app.money.api.model.DetalheErro;
 import com.app.money.api.service.exception.CategoriaExistenteException;
 import com.app.money.api.service.exception.CategoriaNaoEncontradaException;
@@ -45,7 +46,7 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<DetalheErro> handlerCategoriaNaoEncontradaException(CategoriaNaoEncontradaException e, HttpServletRequest request){
 		DetalheErro detalheErro = new DetalheErro();
 		detalheErro.setStatus(404l);
-		detalheErro.setTitulo("Categoria não encontrada");
+		detalheErro.setTitulo(messageSource.getMessage(MensagemEnum.EXCEPTION_CATEGORIA_NAO_ENCONTRADA_NA_BASE.getMensagem(), null, LocaleContextHolder.getLocale()));
 		detalheErro.setMenssagemDesenvolvedor("https://erros.moneyapi.com/404");
 		detalheErro.setDataHora(System.currentTimeMillis());
 		
@@ -64,7 +65,7 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 	public ResponseEntity<DetalheErro> handlerCategoriaExistenteException(CategoriaExistenteException e, HttpServletRequest request){
 		DetalheErro detalheErro = new DetalheErro();
 		detalheErro.setStatus(409l);
-		detalheErro.setTitulo("Categoria já existe na base de dados.");
+		detalheErro.setTitulo(messageSource.getMessage(MensagemEnum.EXCEPTION_CATEGORIA_JA_EXISTE_NA_BASE.getMensagem(), null, LocaleContextHolder.getLocale()));
 		detalheErro.setMenssagemDesenvolvedor("https://erros.moneyapi.com/409");
 		detalheErro.setDataHora(System.currentTimeMillis());
 		
@@ -78,7 +79,7 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException e, HttpHeaders headers, HttpStatus status, WebRequest request){		
 		DetalheErro detalheErro = new DetalheErro();
 		detalheErro.setStatus(400l);
-		detalheErro.setTitulo(messageSource.getMessage("mensagem.invalida", null, LocaleContextHolder.getLocale()));
+		detalheErro.setTitulo(messageSource.getMessage(MensagemEnum.EXCEPTION_PROPRIEDADE_INVALIDA.getMensagem(), null, LocaleContextHolder.getLocale()));
 		detalheErro.setMenssagemDesenvolvedor(e.getCause().toString());
 		detalheErro.setDataHora(System.currentTimeMillis());
 		return handleExceptionInternal(e, detalheErro, headers, HttpStatus.BAD_REQUEST, request);
