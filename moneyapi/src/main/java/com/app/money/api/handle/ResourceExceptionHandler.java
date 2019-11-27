@@ -25,6 +25,8 @@ import com.app.money.api.enums.MensagemEnum;
 import com.app.money.api.model.DetalheErro;
 import com.app.money.api.service.exception.CategoriaExistenteException;
 import com.app.money.api.service.exception.CategoriaNaoEncontradaException;
+import com.app.money.api.service.exception.PessoaExistenteException;
+import com.app.money.api.service.exception.PessoaNaoEncontradaException;
 
 /**
  * 
@@ -111,5 +113,43 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 			erros.add(new DetalheErro(messageSource.getMessage(campoErro,LocaleContextHolder.getLocale()),httpStatus,System.currentTimeMillis(), campoErro.toString()));
 		}
 		return erros;
+	}
+	
+	/**
+	 * 
+	 * Exceção levantada quando uma pessoa específca não foi encontrada na base de dados.
+	 * 
+	 * @param e
+	 * @param request
+	 * @return detalheErro
+	 */
+	@ExceptionHandler(PessoaNaoEncontradaException.class)
+	public ResponseEntity<DetalheErro> handlerCategoriaNaoEncontradaException(PessoaNaoEncontradaException e, HttpServletRequest request){
+		DetalheErro detalheErro = new DetalheErro();
+		detalheErro.setStatus(404l);
+		detalheErro.setTitulo(messageSource.getMessage(MensagemEnum.EXCEPTION_PESSOA_NAO_ENCONTRADA_NA_BASE.getMensagem(), null, LocaleContextHolder.getLocale()));
+		detalheErro.setMenssagemDesenvolvedor("https://erros.moneyapi.com/404");
+		detalheErro.setDataHora(System.currentTimeMillis());
+		
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(detalheErro);
+	}	
+	
+	/**
+	 * 
+	 * Exceção levantada quando tenta cadastrar pessoa repetida na base de dados.
+	 * 
+	 * @param e
+	 * @param request
+	 * @return detalheErro
+	 */
+	@ExceptionHandler(PessoaExistenteException.class)
+	public ResponseEntity<DetalheErro> handlerCategoriaExistenteException(PessoaExistenteException e, HttpServletRequest request){
+		DetalheErro detalheErro = new DetalheErro();
+		detalheErro.setStatus(409l);
+		detalheErro.setTitulo(messageSource.getMessage(MensagemEnum.EXCEPTION_PESSOA_JA_EXISTE_NA_BASE.getMensagem(), null, LocaleContextHolder.getLocale()));
+		detalheErro.setMenssagemDesenvolvedor("https://erros.moneyapi.com/409");
+		detalheErro.setDataHora(System.currentTimeMillis());
+		
+		return ResponseEntity.status(HttpStatus.CONFLICT).body(detalheErro);
 	}
 }
