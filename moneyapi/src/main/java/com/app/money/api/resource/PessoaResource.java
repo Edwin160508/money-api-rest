@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -66,7 +67,7 @@ public class PessoaResource {
 	 */
 	@GetMapping("/{codigo}")
 	public ResponseEntity<Pessoa> buscarPessoaPorCodigo(@PathVariable Long codigo){
-		Optional<Pessoa> pessoaEncontrada = pessoaService.buscarCategoriaPorCodigo(codigo);
+		Optional<Pessoa> pessoaEncontrada = pessoaService.buscarPessoaPorCodigo(codigo);
 		return ResponseEntity.ok().body(pessoaEncontrada.get());
 		
 	}
@@ -75,5 +76,11 @@ public class PessoaResource {
 	public ResponseEntity<Object> excluir(@PathVariable Long codigo){
 		pessoaService.excluir(codigo);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+	}
+	
+	@PutMapping("/{codigo}")
+	public ResponseEntity<Pessoa> atualizar(@PathVariable Long codigo , @Valid @RequestBody Pessoa pessoa){
+		Pessoa pessoaSalva = pessoaService.atualizar(codigo, pessoa);
+		return ResponseEntity.ok().body(pessoaSalva);
 	}
 }

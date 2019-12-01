@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -70,7 +71,7 @@ public class PessoaService {
 	 * @param id
 	 * @return Optional<Pessoa>
 	 */
-	public Optional<Pessoa> buscarCategoriaPorCodigo(Long id){
+	public Optional<Pessoa> buscarPessoaPorCodigo(Long id){
 		Optional<Pessoa> pessoaEncontrada = pessoaRepository.findById(id);
 		
 		if(!pessoaEncontrada.isPresent()) 
@@ -88,13 +89,33 @@ public class PessoaService {
 	 */
 	public void excluir(Long codigo) {
 		try {
-			Optional<Pessoa> buscarCategoriaPorCodigo = buscarCategoriaPorCodigo(codigo);
+			Optional<Pessoa> buscarCategoriaPorCodigo = buscarPessoaPorCodigo(codigo);
 			pessoaRepository.delete(buscarCategoriaPorCodigo.get());
 		}catch(PessoaNaoEncontradaException pe) {
 			throw pe;
 		}catch(Exception e) {
 			logger.error(MensagemEnum.EXCEPTION_PESSOA_NAO_FOI_POSSIVEL_EXCLUIR.getMensagem() + Constante.ERROR + e);
 			throw new GenericException(MensagemEnum.EXCEPTION_PESSOA_NAO_FOI_POSSIVEL_EXCLUIR.getMensagem());
+		}
+	}
+	/**
+	 * 
+	 * Método responsável por realizar atualização de informações referente a pessoa passando codigo
+	 * 
+	 * @param codigo
+	 * @param pessoa
+	 * @return pessoa
+	 */
+	public Pessoa atualizar(Long codigo, Pessoa pessoa) {
+		try {
+			Optional<Pessoa> pessoaEncontradaBase = buscarPessoaPorCodigo(codigo);
+			BeanUtils.copyProperties(pessoa, pessoaEncontradaBase.get(),"codigo");//copiando prorpriedades modificadas no cliente passando para objeto entidade.
+			return pessoaRepository.save(pessoaEncontradaBase.get());
+		}catch(PessoaNaoEncontradaException pne) {
+			throw pne;
+		}catch(Exception e) {
+			logger.error(e.getMessage());
+			throw e;
 		}
 	}
 }
