@@ -104,7 +104,7 @@ public class PessoaService {
 	 * 
 	 * @param codigo
 	 * @param pessoa
-	 * @return pessoa
+	 * @return Pessoa
 	 */
 	public Pessoa atualizar(Long codigo, Pessoa pessoa) {
 		try {
@@ -117,5 +117,26 @@ public class PessoaService {
 			logger.error(e.getMessage());
 			throw e;
 		}
+	}
+	
+	/**
+	 * 
+	 * Método responsável por atualizar apenas o parametro ativo.
+	 * 
+	 * @param codigo
+	 * @param ativo
+	 * @return Pessoa
+	 */
+	public Pessoa atualizarPropriedadeAtivo(Long codigo, Boolean ativo) {
+		try {
+			Optional<Pessoa> pessoaEncontradaBase = buscarPessoaPorCodigo(codigo);
+			pessoaEncontradaBase.get().setAtivo(ativo);
+			return pessoaRepository.save(pessoaEncontradaBase.get());
+		}catch(PessoaNaoEncontradaException pne) {
+			throw pne;
+		}catch(Exception e) {
+			logger.error(e.getMessage());
+			throw e;
+		}		
 	}
 }
