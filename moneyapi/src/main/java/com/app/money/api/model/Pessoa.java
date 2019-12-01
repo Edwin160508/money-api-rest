@@ -27,9 +27,6 @@ public class Pessoa {
 	
 	@NotNull
 	private Boolean ativo;
-	
-	@OneToMany(mappedBy = "pessoa")
-	private Collection<Lancamento> lancamentos;
 
 	public Long getCodigo() {
 		return codigo;
@@ -61,15 +58,6 @@ public class Pessoa {
 
 	public void setAtivo(Boolean ativo) {
 		this.ativo = ativo;
-	}
-
-	public Collection<Lancamento> getLancamentos() {
-		return lancamentos;
-	}
-
-	public void setLancamentos(Collection<Lancamento> lancamentos) {
-		this.lancamentos = lancamentos;
-	}
-	
+	}	
 	
 }

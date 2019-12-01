@@ -114,8 +114,8 @@ public class PessoaService {
 		}catch(PessoaNaoEncontradaException pne) {
 			throw pne;
 		}catch(Exception e) {
-			logger.error(e.getMessage());
-			throw e;
+			logger.error(MensagemEnum.EXCEPTION_PESSOA_NAO_FOI_POSSIVEL_ATUALIZAR.getMensagem() + Constante.ERROR + e);
+			throw new GenericException(MensagemEnum.EXCEPTION_PESSOA_NAO_FOI_POSSIVEL_ATUALIZAR.getMensagem());
 		}
 	}
 	
@@ -135,8 +135,8 @@ public class PessoaService {
 		}catch(PessoaNaoEncontradaException pne) {
 			throw pne;
 		}catch(Exception e) {
-			logger.error(e.getMessage());
-			throw e;
+			logger.error(MensagemEnum.EXCEPTION_PESSOA_NAO_FOI_POSSIVEL_ATUALIZAR.getMensagem() + Constante.ERROR + e);
+			throw new GenericException(MensagemEnum.EXCEPTION_PESSOA_NAO_FOI_POSSIVEL_ATUALIZAR.getMensagem());
 		}		
 	}
 }

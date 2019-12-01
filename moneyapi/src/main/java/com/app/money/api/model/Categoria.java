@@ -22,10 +22,7 @@ public class Categoria {
 	@NotNull
 	@Size(min = 3, max = 20)
 	private String nome;
-	
-	@OneToMany(mappedBy = "categoria")
-	private Collection<Lancamento> lancamentos;
-	
+		
 	public Long getCodigo() {
 		return codigo;
 	}
@@ -39,12 +36,6 @@ public class Categoria {
 		this.nome = nome;
 	}
 	
-	public Collection<Lancamento> getLancamentos() {
-		return lancamentos;
-	}
-	public void setLancamentos(Collection<Lancamento> lancamentos) {
-		this.lancamentos = lancamentos;
-	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;

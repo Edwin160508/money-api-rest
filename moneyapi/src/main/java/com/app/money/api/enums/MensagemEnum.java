@@ -8,7 +8,11 @@ public enum MensagemEnum {
 	EXCEPTION_PESSOA_NAO_ENCONTRADA_NA_BASE("0004","exception.pessoa.nao.encontrada"),
 	EXCEPTION_PESSOA_JA_EXISTE_NA_BASE("0005","exception.pessoa.ja.existe.na.base"),
 	EXCEPTION_PESSOA_NAO_FOI_POSSIVEL_EXCLUIR("0006","exception.pessoa.nao.foi.possivel.excluir"),
-	EXCEPTION_CATEGORIA_NAO_FOI_POSSIVEL_EXCLUIR("0007","exception.categoria.nao.foi.possivel.excluir");
+	EXCEPTION_CATEGORIA_NAO_FOI_POSSIVEL_EXCLUIR("0007","exception.categoria.nao.foi.possivel.excluir"),
+	EXCEPTION_LANCAMENTO_NAO_ENCONTRADO_NA_BASE("0008","exception.lancamento.nao.encontrado"),
+	EXCEPTION_PESSOA_NAO_FOI_POSSIVEL_ATUALIZAR("0009","exception.pessoa.nao.foi.possivel.atualizar");
+	
+	
 	public String status;
 	public String mensagem;
 	
