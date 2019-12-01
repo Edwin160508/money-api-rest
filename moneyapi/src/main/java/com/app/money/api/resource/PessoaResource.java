@@ -71,7 +71,7 @@ public class PessoaResource {
 		
 	}
 	
-	@DeleteMapping
+	@DeleteMapping("/{codigo}")
 	public ResponseEntity<Object> excluir(@PathVariable Long codigo){
 		pessoaService.excluir(codigo);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
