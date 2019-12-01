@@ -1,10 +1,13 @@
 package com.app.money.api.model;
 
+import java.util.Collection;
+
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -24,6 +27,9 @@ public class Pessoa {
 	
 	@NotNull
 	private Boolean ativo;
+	
+	@OneToMany(mappedBy = "pessoa")
+	private Collection<Lancamento> lancamentos;
 
 	public Long getCodigo() {
 		return codigo;
@@ -55,6 +61,14 @@ public class Pessoa {
 
 	public void setAtivo(Boolean ativo) {
 		this.ativo = ativo;
+	}
+
+	public Collection<Lancamento> getLancamentos() {
+		return lancamentos;
+	}
+
+	public void setLancamentos(Collection<Lancamento> lancamentos) {
+		this.lancamentos = lancamentos;
 	}
 	
 	
