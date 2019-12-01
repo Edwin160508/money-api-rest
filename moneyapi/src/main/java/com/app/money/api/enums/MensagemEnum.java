@@ -10,7 +10,10 @@ public enum MensagemEnum {
 	EXCEPTION_PESSOA_NAO_FOI_POSSIVEL_EXCLUIR("0006","exception.pessoa.nao.foi.possivel.excluir"),
 	EXCEPTION_CATEGORIA_NAO_FOI_POSSIVEL_EXCLUIR("0007","exception.categoria.nao.foi.possivel.excluir"),
 	EXCEPTION_LANCAMENTO_NAO_ENCONTRADO_NA_BASE("0008","exception.lancamento.nao.encontrado"),
-	EXCEPTION_PESSOA_NAO_FOI_POSSIVEL_ATUALIZAR("0009","exception.pessoa.nao.foi.possivel.atualizar");
+	EXCEPTION_PESSOA_NAO_FOI_POSSIVEL_ATUALIZAR("0009","exception.pessoa.nao.foi.possivel.atualizar"),
+	EXCEPTION_LANCAMENTO_NAO_FOI_POSSIVEL_CADASTRAR("0010","exception.lancamento.nao.foi.possivel.cadastrar"),
+	EXCEPTION_CATEGORIA_NAO_FOI_POSSIVEL_CADASTRAR("0011","exception.lancamento.nao.foi.possivel.cadastrar"),
+	EXCEPTION_PESSOA_NAO_FOI_POSSIVEL_CADASTRAR("0012","exception.lancamento.nao.foi.possivel.cadastrar");
 	
 	
 	public String status;
