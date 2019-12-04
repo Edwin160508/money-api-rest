@@ -3,8 +3,6 @@ package com.app.money.api.service;
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.ConstraintViolationException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +11,14 @@ import org.springframework.stereotype.Service;
 
 import com.app.money.api.enums.MensagemEnum;
 import com.app.money.api.model.Lancamento;
+import com.app.money.api.model.Pessoa;
 import com.app.money.api.repository.LancamentoRepository;
+import com.app.money.api.repository.PessoaRepository;
+import com.app.money.api.service.exception.CategoriaNaoEncontradaException;
 import com.app.money.api.service.exception.EntidadeNaoEncontradaException;
 import com.app.money.api.service.exception.GenericException;
+import com.app.money.api.service.exception.PessoaInativaException;
+import com.app.money.api.service.exception.PessoaNaoEncontradaException;
 import com.app.money.api.utils.Constante;
 
 @Service
@@ -23,6 +26,15 @@ public class LancamentoService {
 	
 	@Autowired
 	private LancamentoRepository lancamentoRepository;
+	
+	@Autowired
+	private PessoaRepository pessoaRepository;
+	
+	@Autowired
+	private PessoaService pessoaService;
+	
+	@Autowired
+	private CategoriaService categoriaService;
 	
 	Logger logger = LoggerFactory.getLogger(LancamentoService.class);
 	
@@ -60,14 +72,46 @@ public class LancamentoService {
 			if(lancamento.getCodigo() != null) {
 				buscarLancamentoPorCodigo(lancamento.getCodigo());
 			}
+			verificaCategoriaExisteEmBase(lancamento);
+			verificaPessoaInexistenteOuInativa(lancamento);
+			
 			return lancamentoRepository.save(lancamento);
 		}catch(EntidadeNaoEncontradaException en) {
 			throw en;
 		}catch(DataIntegrityViolationException dve) {
 			throw dve;
+		}catch(CategoriaNaoEncontradaException cne) {
+			throw cne;
+		}catch(PessoaNaoEncontradaException pne) {
+			throw pne;
+		}catch(PessoaInativaException pie){
+			throw pie;
 		}catch(Exception e) {
 			logger.error(MensagemEnum.EXCEPTION_LANCAMENTO_NAO_FOI_POSSIVEL_CADASTRAR.getMensagem() + Constante.ERROR + e);
 			throw new GenericException(MensagemEnum.EXCEPTION_LANCAMENTO_NAO_FOI_POSSIVEL_CADASTRAR.getMensagem());
 		}
+	}
+	
+	/**
+	 * 
+	 * Método responsável por validar se pessoa existe na base ou é inativo.
+	 * 
+	 * @param lancamento
+	 */
+	private void verificaPessoaInexistenteOuInativa(Lancamento lancamento) {
+		Pessoa pessoa = pessoaService.buscarPessoaPorCodigo(lancamento.getPessoa().getCodigo()).get();
+		if(pessoa.isInativo()) {
+			throw new PessoaInativaException();
+		}
+	}
+	
+	/**
+	 * 
+	 * Método responsável por verificar
+	 * 
+	 * @param lancamento
+	 */
+	private void verificaCategoriaExisteEmBase(Lancamento lancamento) {
+		categoriaService.buscarCategoriaPorCodigo(lancamento.getCategoria().getCodigo());
 	}
 }

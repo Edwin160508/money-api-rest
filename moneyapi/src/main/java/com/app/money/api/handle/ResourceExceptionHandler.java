@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -28,6 +29,7 @@ import com.app.money.api.model.DetalheErro;
 import com.app.money.api.service.exception.CategoriaExistenteException;
 import com.app.money.api.service.exception.CategoriaNaoEncontradaException;
 import com.app.money.api.service.exception.PessoaExistenteException;
+import com.app.money.api.service.exception.PessoaInativaException;
 import com.app.money.api.service.exception.PessoaNaoEncontradaException;
 
 /**
@@ -126,7 +128,7 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 	 * @return detalheErro
 	 */
 	@ExceptionHandler(PessoaNaoEncontradaException.class)
-	public ResponseEntity<DetalheErro> handlerCategoriaNaoEncontradaException(PessoaNaoEncontradaException e, HttpServletRequest request){
+	public ResponseEntity<DetalheErro> handlerPessoaNaoEncontradaException(PessoaNaoEncontradaException e, HttpServletRequest request){
 		DetalheErro detalheErro = new DetalheErro();
 		detalheErro.setStatus(404l);
 		detalheErro.setTitulo(messageSource.getMessage(MensagemEnum.EXCEPTION_PESSOA_NAO_ENCONTRADA_NA_BASE.getMensagem(), null, LocaleContextHolder.getLocale()));
@@ -155,6 +157,15 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 		return ResponseEntity.status(HttpStatus.CONFLICT).body(detalheErro);
 	}
 	
+	/**
+	 * 
+	 * Exceção levantada quando ocorre erro de integridade de dados.
+	 * Ex cadastrar lancamento passando 'codigoCatgoria' inexistente em base.
+	 * 
+	 * @param ex
+	 * @param request
+	 * @return
+	 */
 	@ExceptionHandler({ DataIntegrityViolationException.class })
 	public ResponseEntity<Object> handleDataIntegrityViolationException(DataIntegrityViolationException ex, 
 			WebRequest request) {
@@ -168,4 +179,33 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 
 	}
 	
+	/**
+	 * 
+	 * Exceção levantada quando tenta cadastrar lancamento com pessoa com cadastro inativo
+	 * 
+	 * @param p
+	 * @param request
+	 * @return
+	 */
+	@ExceptionHandler({ PessoaInativaException.class })
+	public ResponseEntity<Object> handlePessoaInativaException(PessoaInativaException p, WebRequest request){
+		String mensagemUsuario = messageSource.getMessage(MensagemEnum.ERROR_OPERACAO_NAO_PERMITIDA.getMensagem(), null,LocaleContextHolder.getLocale());
+		String mensagemDesenvolvedor =  ExceptionUtils.getRootCauseMessage(p);
+		List<DetalheErro> erros = Arrays.asList(new DetalheErro(mensagemUsuario,400l, System.currentTimeMillis(),mensagemDesenvolvedor));
+		return handleExceptionInternal(p, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	/**
+	 * Exceção levandada quando tenta consultar entidade inexistente na base
+	 * @param enf
+	 * @param request
+	 * @return
+	 */
+	@ExceptionHandler({EntityNotFoundException.class})
+	public ResponseEntity<Object> handleEntityNotFoundException(EntityNotFoundException enf, WebRequest request){
+		String mensagemUsuario = messageSource.getMessage(MensagemEnum.ERROR_OPERACAO_NAO_PERMITIDA.getMensagem(), null,LocaleContextHolder.getLocale());
+		String mensagemDesenvolvedor = ExceptionUtils.getRootCauseMessage(enf);
+		List<DetalheErro> erros = Arrays.asList(new DetalheErro(mensagemUsuario, 400l, System.currentTimeMillis(), mensagemDesenvolvedor));
+		return handleExceptionInternal(enf, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
 }
