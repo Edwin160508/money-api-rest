@@ -13,7 +13,9 @@ public enum MensagemEnum {
 	EXCEPTION_PESSOA_NAO_FOI_POSSIVEL_ATUALIZAR("0009","exception.pessoa.nao.foi.possivel.atualizar"),
 	EXCEPTION_LANCAMENTO_NAO_FOI_POSSIVEL_CADASTRAR("0010","exception.lancamento.nao.foi.possivel.cadastrar"),
 	EXCEPTION_CATEGORIA_NAO_FOI_POSSIVEL_CADASTRAR("0011","exception.lancamento.nao.foi.possivel.cadastrar"),
-	EXCEPTION_PESSOA_NAO_FOI_POSSIVEL_CADASTRAR("0012","exception.lancamento.nao.foi.possivel.cadastrar");
+	EXCEPTION_PESSOA_NAO_FOI_POSSIVEL_CADASTRAR("0012","exception.lancamento.nao.foi.possivel.cadastrar"),
+	ERROR_OPERACAO_NAO_PERMITIDA("0013","error.operacao.nao.permitida");
+	
 	
 	
 	public String status;

@@ -3,9 +3,12 @@ package com.app.money.api.service;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.ConstraintViolationException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.app.money.api.enums.MensagemEnum;
@@ -60,6 +63,8 @@ public class LancamentoService {
 			return lancamentoRepository.save(lancamento);
 		}catch(EntidadeNaoEncontradaException en) {
 			throw en;
+		}catch(DataIntegrityViolationException dve) {
+			throw dve;
 		}catch(Exception e) {
 			logger.error(MensagemEnum.EXCEPTION_LANCAMENTO_NAO_FOI_POSSIVEL_CADASTRAR.getMensagem() + Constante.ERROR + e);
 			throw new GenericException(MensagemEnum.EXCEPTION_LANCAMENTO_NAO_FOI_POSSIVEL_CADASTRAR.getMensagem());
