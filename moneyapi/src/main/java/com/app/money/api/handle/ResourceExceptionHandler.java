@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -159,7 +160,7 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 			WebRequest request) {
 		String mensagemUsuario = messageSource.getMessage(MensagemEnum.ERROR_OPERACAO_NAO_PERMITIDA.getMensagem(), null,
 				LocaleContextHolder.getLocale());
-		String mensagemDesenvolvedor = ex.getCause().toString();
+		String mensagemDesenvolvedor =  ExceptionUtils.getRootCauseMessage(ex);
 
 		List<DetalheErro> erros = Arrays.asList(new DetalheErro(mensagemUsuario,400l, System.currentTimeMillis(),mensagemDesenvolvedor));
 
