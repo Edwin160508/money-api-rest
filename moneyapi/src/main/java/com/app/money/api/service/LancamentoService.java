@@ -13,7 +13,7 @@ import com.app.money.api.enums.MensagemEnum;
 import com.app.money.api.model.Lancamento;
 import com.app.money.api.model.Pessoa;
 import com.app.money.api.repository.LancamentoRepository;
-import com.app.money.api.repository.PessoaRepository;
+import com.app.money.api.repository.filter.LancamentoFilter;
 import com.app.money.api.service.exception.CategoriaNaoEncontradaException;
 import com.app.money.api.service.exception.EntidadeNaoEncontradaException;
 import com.app.money.api.service.exception.GenericException;
@@ -28,19 +28,12 @@ public class LancamentoService {
 	private LancamentoRepository lancamentoRepository;
 	
 	@Autowired
-	private PessoaRepository pessoaRepository;
-	
-	@Autowired
 	private PessoaService pessoaService;
 	
 	@Autowired
 	private CategoriaService categoriaService;
 	
 	Logger logger = LoggerFactory.getLogger(LancamentoService.class);
-	
-	public List<Lancamento> listar(){
-		return lancamentoRepository.findAll();
-	}
 	
 	/**
 	 * 
@@ -113,5 +106,16 @@ public class LancamentoService {
 	 */
 	private void verificaCategoriaExisteEmBase(Lancamento lancamento) {
 		categoriaService.buscarCategoriaPorCodigo(lancamento.getCategoria().getCodigo());
+	}
+	
+	/**
+	 * 
+	 * Método resonsável por trazer lista de lancamentos passando filtro.
+	 * 
+	 * @param lancamentoFilter
+	 * @return List<Lancamento>
+	 */
+	public List<Lancamento> pesquisarLancamentoFiltro(LancamentoFilter lancamentoFilter){
+		return lancamentoRepository.filtrar(lancamentoFilter);
 	}
 }

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.app.money.api.event.RecursoCriadoEvent;
 import com.app.money.api.model.Lancamento;
+import com.app.money.api.repository.filter.LancamentoFilter;
 import com.app.money.api.service.LancamentoService;
 
 @RestController
@@ -32,8 +33,8 @@ public class LancamentoResource {
 	private ApplicationEventPublisher publisher;
 	
 	@GetMapping
-	public ResponseEntity<List<Lancamento>> listar(){
-		return ResponseEntity.ok().body(lancamentoService.listar());
+	public ResponseEntity<List<Lancamento>> pesquisarLancamentoFiltro(LancamentoFilter lancamentoFilter){		
+		return ResponseEntity.ok().body(lancamentoService.pesquisarLancamentoFiltro(lancamentoFilter));
 	}
 	
 	@GetMapping("/{codigo}")
@@ -47,5 +48,5 @@ public class LancamentoResource {
 		Lancamento lancamentoSalvo = lancamentoService.cadastrar(lancamento);
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, lancamentoSalvo.getCodigo()));
 		return ResponseEntity.status(HttpStatus.CREATED).body(lancamentoSalvo);
-	}
+	}	
 }
