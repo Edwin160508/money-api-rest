@@ -1,12 +1,13 @@
 package com.app.money.api.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.app.money.api.enums.MensagemEnum;
@@ -115,8 +116,8 @@ public class LancamentoService {
 	 * @param lancamentoFilter
 	 * @return List<Lancamento>
 	 */
-	public List<Lancamento> pesquisarLancamentoFiltro(LancamentoFilter lancamentoFilter){
-		return lancamentoRepository.filtrar(lancamentoFilter);
+	public Page<Lancamento> pesquisarLancamentoFiltro(LancamentoFilter lancamentoFilter, Pageable page){
+		return lancamentoRepository.filtrar(lancamentoFilter, page);
 	}
 
 	/**
