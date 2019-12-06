@@ -14,7 +14,8 @@ public enum MensagemEnum {
 	EXCEPTION_LANCAMENTO_NAO_FOI_POSSIVEL_CADASTRAR("0010","exception.lancamento.nao.foi.possivel.cadastrar"),
 	EXCEPTION_CATEGORIA_NAO_FOI_POSSIVEL_CADASTRAR("0011","exception.lancamento.nao.foi.possivel.cadastrar"),
 	EXCEPTION_PESSOA_NAO_FOI_POSSIVEL_CADASTRAR("0012","exception.lancamento.nao.foi.possivel.cadastrar"),
-	ERROR_OPERACAO_NAO_PERMITIDA("0013","error.operacao.nao.permitida");
+	ERROR_OPERACAO_NAO_PERMITIDA("0013","error.operacao.nao.permitida"),
+	EXCEPTION_LANCAMENTO_NAO_FOI_POSSIVEL_EXCLUIR("00014","exception.lancamento.nao.foi.possivel.excluir");
 	
 	
 	

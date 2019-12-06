@@ -28,6 +28,7 @@ import com.app.money.api.enums.MensagemEnum;
 import com.app.money.api.model.DetalheErro;
 import com.app.money.api.service.exception.CategoriaExistenteException;
 import com.app.money.api.service.exception.CategoriaNaoEncontradaException;
+import com.app.money.api.service.exception.EntidadeNaoEncontradaException;
 import com.app.money.api.service.exception.PessoaExistenteException;
 import com.app.money.api.service.exception.PessoaInativaException;
 import com.app.money.api.service.exception.PessoaNaoEncontradaException;
@@ -207,5 +208,13 @@ public class ResourceExceptionHandler extends ResponseEntityExceptionHandler {
 		String mensagemDesenvolvedor = ExceptionUtils.getRootCauseMessage(enf);
 		List<DetalheErro> erros = Arrays.asList(new DetalheErro(mensagemUsuario, 400l, System.currentTimeMillis(), mensagemDesenvolvedor));
 		return handleExceptionInternal(enf, erros, new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
+	}
+	
+	@ExceptionHandler({EntidadeNaoEncontradaException.class})
+	public ResponseEntity<Object> handleEntidadeNaoEncontradaException(EntidadeNaoEncontradaException ene, WebRequest request){
+		String mensagemUsuario = messageSource.getMessage(ene.getMessage(), null,LocaleContextHolder.getLocale());
+		String mensagemDesenvolvedor = ExceptionUtils.getRootCauseMessage(ene);
+		List<DetalheErro> erros = Arrays.asList(new DetalheErro(mensagemUsuario, 400l, System.currentTimeMillis(), mensagemDesenvolvedor));
+		return handleExceptionInternal(ene, erros, new HttpHeaders(),HttpStatus.BAD_REQUEST, request);
 	}
 }

@@ -118,4 +118,22 @@ public class LancamentoService {
 	public List<Lancamento> pesquisarLancamentoFiltro(LancamentoFilter lancamentoFilter){
 		return lancamentoRepository.filtrar(lancamentoFilter);
 	}
+
+	/**
+	 * 
+	 * Método responsável por fazer exclusão da entidade lancamento através do código passado.
+	 * 
+	 * @param codigo
+	 */
+	public void excluir(Long codigo) {
+		try {
+			Optional<Lancamento> lancamento = buscarLancamentoPorCodigo(codigo);
+			lancamentoRepository.delete(lancamento.get());
+		}catch(EntidadeNaoEncontradaException ene) {
+			throw ene;
+		}catch(Exception e) {
+			logger.error(MensagemEnum.EXCEPTION_LANCAMENTO_NAO_FOI_POSSIVEL_EXCLUIR.getMensagem()+ Constante.ERROR + e);
+			throw new GenericException(MensagemEnum.EXCEPTION_LANCAMENTO_NAO_FOI_POSSIVEL_EXCLUIR.getMensagem());
+		}
+	}
 }
